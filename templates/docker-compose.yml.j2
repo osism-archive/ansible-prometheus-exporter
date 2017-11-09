@@ -1,0 +1,27 @@
+---
+version: '2'
+services:
+{% if prometheus_exporter_node_enable|bool and prometheus_exporter_node_groupname in groups %}
+  node:
+    restart: unless-stopped
+    image: "{{ prometheus_exporter_node_image }}"
+    volumes:
+      - "/etc/hosts:/etc/hosts:ro"
+    ports:
+      - "{{ prometheus_exporter_node_host }}:{{ prometheus_exporter_node_port }}:80"
+    network_mode: host
+    pid: host
+{% endif %}
+
+{% if prometheus_exporter_node_enable|bool and prometheus_exporter_node_groupname in groups %}
+  mariadb:
+    restart: unless-stopped
+    image: "{{ prometheus_exporter_mariadb_image }}"
+    environment:
+      DATA_SOURCE_NAME: "{{ prometheus_exporter_mariadb_target_address }}:{{ prometheus_exporter_mariadb_target_port }}"
+    volumes:
+      - "/etc/hosts:/etc/hosts:ro"
+      - "{{ prometheus_configuration_directory }}/mariadb/my.cnf:/root/.my.cnf:ro"
+    ports:
+      - "{{ prometheus_exporter_mariadb_host }}:{{ prometheus_exporter_mariadb_port }}:9104"
+{% endif %}

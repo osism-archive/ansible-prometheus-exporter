@@ -1,0 +1,45 @@
+---
+- name: prometheus-exporter - install required packages
+  package:
+    name: "{{ item }}"
+    state: present
+  become: true
+  with_items: "{{ required_packages_prometheus_exporter }}"
+
+- name: prometheus-exporter - create required directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0750
+  become: true
+  with_items:
+    - "{{ prometheus_exporter_docker_compose_directory }}"
+    - "{{ prometheus_exporter_configuration_directory }}"
+    - "{{ prometheus_exporter_configuration_directory }}/mariadb"
+
+- name: prometheus-exporter - copy configuration files
+  template:
+    src: "{{ item.src }}"
+    dest: prometheus_exporter_configuration_directory/{{ item.dest }}"
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+  with_items:
+    - src: mariadb/my.cnf.j2
+      dest: mariadb/my.cnf
+  
+- name: prometheus-exporter - copy docker-compose.yml file
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ prometheus_exporter_docker_compose_directory }}/docker-compose.yml"
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+
+- name: prometheus-exporter - run service
+  docker_service:
+    project_name: prometheus-exporter
+    project_src: "{{ prometheus_exporter_docker_compose_directory }}"
+    pull: yes

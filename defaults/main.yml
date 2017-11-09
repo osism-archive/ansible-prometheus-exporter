@@ -1,0 +1,76 @@
+---
+# NOTE(berendt): Use default ports from https://github.com/prometheus/prometheus/wiki/Default-port-allocations
+
+##########################
+# generic
+
+prometheus_exporter_configuration_directory: /opt/prometheus-exporter/configuration
+prometheus_exporter_docker_compose_directory: /opt/prometheus-exporter
+
+##########################
+# packages
+
+required_packages_prometheus_exporter:
+  - docker-compose
+  - python-docker
+
+##########################
+# docker
+
+docker_registry: index.docker.io
+
+##########################
+# operator user
+
+operator_user: dragon
+operator_group: "{{ operator_user }}"
+
+##########################
+# ceph
+
+##########################
+# mariadb
+
+prometheus_exporter_mariadb_enable: yes
+prometheus_exporter_mariadb_groupname: mariadb
+
+prometheus_exporter_mariadb_tag: master
+prometheus_exporter_mariadb_image: "{{ docker_registry }}/prom/mysqld-exporter:{{ prometheus_exporter_mariadb_tag }}"
+
+prometheus_exporter_mariadb_host: "{{ ansible_default_ipv4.address }}"
+prometheus_exporter_mariadb_port: 9104
+
+prometheus_exporter_mariadb_target_address: "{{ ansible_default_ipv4.address }}"
+prometheus_exporter_mariadb_target_port: 3306
+prometheus_exporter_mariadb_target_protocol: tcp
+
+prometheus_exporter_mariadb_target_username: prometheus
+prometheus_exporter_mariadb_target_password: password
+
+##########################
+# haproxy
+
+prometheus_exporter_haproxy_enable: yes
+prometheus_exporter_haproxy_groupname: haproxy
+
+prometheus_exporter_haproxy_port: 9101
+
+##########################
+# node
+
+prometheus_exporter_node_enable: yes
+prometheus_exporter_node_groupname: all
+
+prometheus_exporter_node_host: "{{ ansible_default_ipv4.address }}"
+prometheus_exporter_node_port: 9100
+
+prometheus_exporter_node_tag: master
+prometheus_exporter_node_image: "{{ docker_registry }}/prom/node-exporter:{{ prometheus_exporter_mariadb_tag }}"
+
+##########################
+# memcached
+
+prometheus_exporter_memcached_enable: yes
+prometheus_exporter_memcached_groupname: memcached
+
+prometheus_exporter_memcached_port: 9150
