@@ -17,18 +17,34 @@
   with_items:
     - "{{ prometheus_exporter_docker_compose_directory }}"
     - "{{ prometheus_exporter_configuration_directory }}"
-    - "{{ prometheus_exporter_configuration_directory }}/mariadb"
 
-- name: prometheus-exporter - copy configuration files
+- name: prometheus-exporter - create required directories (mariadb)
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0750
+  become: true
+  with_items:
+    - "{{ prometheus_exporter_configuration_directory }}/mariadb"
+  when:
+    - prometheus_exporter_mariadb_enable|bool
+    - prometheus_exporter_mariadb_groupname in group_names
+
+- name: prometheus-exporter - copy configuration files (mariadb)
   template:
     src: "{{ item.src }}"
-    dest: prometheus_exporter_configuration_directory/{{ item.dest }}"
+    dest: "{{ prometheus_exporter_configuration_directory }}/{{ item.dest }}"
     owner: "{{ operator_user }}"
     group: "{{ operator_group }}"
     mode: 0640
   with_items:
     - src: mariadb/my.cnf.j2
       dest: mariadb/my.cnf
+  when:
+    - prometheus_exporter_mariadb_enable|bool
+    - prometheus_exporter_mariadb_groupname in group_names
   
 - name: prometheus-exporter - copy docker-compose.yml file
   template:
