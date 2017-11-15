@@ -5,6 +5,7 @@ services:
   node:
     restart: unless-stopped
     image: "{{ prometheus_exporter_node_image }}"
+    entrypoint: "/bin/node_exporter --collector.bonding --no-collector.infiniband --no-collector.ipvs --no-collector.textfile --no-collector.wifi --no-collector.zfs"
     volumes:
       - "/etc/hosts:/etc/hosts:ro"
     ports:
@@ -17,6 +18,7 @@ services:
   mariadb:
     restart: unless-stopped
     image: "{{ prometheus_exporter_mariadb_image }}"
+    entrypoint: "/bin/mysqld_exporter -collect.binlog_size=true -collect.info_schema.processlist=true"
     volumes:
       - "/etc/hosts:/etc/hosts:ro"
       - "{{ prometheus_exporter_configuration_directory }}/mariadb/my.cnf:/root/.my.cnf:ro"
