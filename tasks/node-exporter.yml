@@ -1,0 +1,43 @@
+---
+- name: prometheus-exporter - copy node-exporter binary
+  copy:
+    src: node-exporter/node_exporter
+    dest: /usr/sbin/node_exporter
+    owner: root
+    group: root
+    mode: 0755
+  become: true
+  notify: Restart node_exporter service
+
+- name: prometheus-exporter - copy service file
+  copy:
+    src: node-exporter/node_exporter.service
+    dest: /etc/systemd/system/node_exporter.service
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  notify: Restart node_exporter service
+
+- name: prometheus-exporter - copy defaults file
+  template:
+    src: node-exporter/node_exporter.defaults.j2
+    dest: /etc/default/node_exporter
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  notify: Restart node_exporter service
+
+- name: prometheus-exporter - create node_exporter user
+  user:
+    name: node_exporter
+    shell: /usr/sbin/nologin
+  become: true
+
+- name: prometheus-exporter - enable/start node_exporter service
+  systemd:
+    name: node_exporter
+    state: started
+    enabled: yes
+    daemon_reload: yes

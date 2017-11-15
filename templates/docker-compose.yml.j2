@@ -1,19 +1,6 @@
 ---
 version: '2'
 services:
-{% if prometheus_exporter_node_enable|bool and (prometheus_exporter_node_groupname in group_names or prometheus_exporter_node_groupname == 'all') %}
-  node:
-    restart: unless-stopped
-    image: "{{ prometheus_exporter_node_image }}"
-    entrypoint: "/bin/node_exporter --collector.bonding --no-collector.infiniband --no-collector.ipvs --no-collector.textfile --no-collector.wifi --no-collector.zfs"
-    volumes:
-      - "/etc/hosts:/etc/hosts:ro"
-    ports:
-      - "{{ prometheus_exporter_node_host }}:{{ prometheus_exporter_node_port }}:80"
-    network_mode: host
-    pid: host
-{% endif %}
-
 {% if prometheus_exporter_mariadb_enable|bool and (prometheus_exporter_mariadb_groupname in group_names or prometheus_exporter_mariadb_groupname == 'all') %}
   mariadb:
     restart: unless-stopped

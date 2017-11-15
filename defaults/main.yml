@@ -56,16 +56,13 @@ prometheus_exporter_haproxy_groupname: haproxy
 prometheus_exporter_haproxy_port: 9101
 
 ##########################
-# node
+# node-exporter
 
-prometheus_exporter_node_enable: yes
-prometheus_exporter_node_groupname: all
+prometheus_exporter_node_exporter_enable: yes
+prometheus_exporter_node_exporter_groupname: all
 
-prometheus_exporter_node_host: "{{ ansible_default_ipv4.address }}"
-prometheus_exporter_node_port: 9100
-
-prometheus_exporter_node_tag: master
-prometheus_exporter_node_image: "{{ docker_registry }}/prom/node-exporter:{{ prometheus_exporter_mariadb_tag }}"
+prometheus_exporter_node_exporter_host: "{{ ansible_default_ipv4.address }}"
+prometheus_exporter_node_exporter_port: 9100
 
 ##########################
 # memcached
