@@ -26,8 +26,6 @@ services:
       - "/dev/disk/:/dev/disk:ro"
 {% if prometheus_exporter_cadvisor_enable_webinterface|bool %}
       - "{{ prometheus_exporter_configuration_directory }}/cadvisor/htpasswd.cadvisor:/etc/htpasswd.cadvisor:ro"
-    ports:
-      - "{{ prometheus_exporter_cadvisor_host }}:{{ prometheus_exporter_cadvisor_port }}:8080"
 {% endif %}
 {% endif %}
 
@@ -48,4 +46,20 @@ services:
     entrypoint: "/bin/memcached_exporter -memcached.address {{ prometheus_exporter_memcached_target_address }}:{{ prometheus_exporter_memcached_target_port }}"
     volumes:
       - "/etc/hosts:/etc/hosts:ro"
+{% endif %}
+
+{% if prometheus_exporter_haproxy_enable|bool and (prometheus_exporter_haproxy_groupname in group_names or prometheus_exporter_haproxy_groupname == 'all') %}
+  haproxy:
+    restart: unless-stopped
+    image: "{{ prometheus_exporter_haproxy_image }}"
+    entrypoint: "/bin/haproxy_exporter --haproxy.scrape-uri=unix:/haproxy.sock"
+    volumes:
+      - "/etc/hosts:/etc/hosts:ro"
+      - "{{ prometheus_exporter_haproxy_volume_socket }}:/haproxy.sock:ro"
+{% endif %}
+
+{% if prometheus_exporter_haproxy_enable|bool and (prometheus_exporter_haproxy_groupname in group_names or prometheus_exporter_haproxy_groupname == 'all') %}
+volumes:
+  {{ prometheus_exporter_haproxy_volume_socket }}:
+    external: true
 {% endif %}

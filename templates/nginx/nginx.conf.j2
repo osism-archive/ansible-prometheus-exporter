@@ -13,6 +13,12 @@ server {
     }
 {% endif %}
 
+{% if prometheus_exporter_cadvisor_enable|bool and prometheus_exporter_cadvisor_enable_webinterface|bool  and (prometheus_exporter_cadvisor_groupname in group_names or prometheus_exporter_cadvisor_groupname == 'all') %}
+    location /cadvisor {
+        proxy_pass   http://cadvisor:8080/containers;
+    }
+{% endif %}
+
 {% if prometheus_exporter_node_exporter_enable|bool and (prometheus_exporter_node_exporter_groupname in group_names or prometheus_exporter_node_exporter_groupname == 'all') %}
     location /metrics/node {
         proxy_pass   http://{{ prometheus_exporter_node_exporter_host }}:{{ prometheus_exporter_node_exporter_port }}/metrics;
@@ -28,6 +34,12 @@ server {
 {% if prometheus_exporter_memcached_enable|bool and (prometheus_exporter_memcached_groupname in group_names or prometheus_exporter_memcached_groupname == 'all') %}
     location /metrics/memcached {
         proxy_pass   http://memcached:9150/metrics;
+    }
+{% endif %}
+
+{% if prometheus_exporter_haproxy_enable|bool and (prometheus_exporter_haproxy_groupname in group_names or prometheus_exporter_haproxy_groupname == 'all') %}
+    location /metrics/haproxy {
+        proxy_pass   http://haproxy:9101/metrics;
     }
 {% endif %}
 }
