@@ -53,6 +53,7 @@ prometheus_exporter_mariadb_target_password: password
 prometheus_exporter_haproxy_enable: yes
 prometheus_exporter_haproxy_groupname: haproxy
 
+prometheus_exporter_haproxy_host: "{{ ansible_default_ipv4.address }}"
 prometheus_exporter_haproxy_port: 9101
 
 ##########################
@@ -65,9 +66,25 @@ prometheus_exporter_node_exporter_host: "{{ ansible_default_ipv4.address }}"
 prometheus_exporter_node_exporter_port: 9100
 
 ##########################
+# cadvisor
+
+prometheus_exporter_cadvisor_enable: yes
+prometheus_exporter_cadvisor_groupname: all
+
+prometheus_exporter_cadvisor_tag: latest
+prometheus_exporter_cadvisor_image: "{{ docker_registry }}/google/cadvisor:{{ prometheus_exporter_cadvisor_tag }}"
+
+prometheus_exporter_cadvisor_host: "{{ ansible_default_ipv4.address }}"
+prometheus_exporter_cadvisor_port: 9102
+
+prometheus_exporter_cadvisor_username: cadvisor
+prometheus_exporter_cadvisor_password: password
+
+##########################
 # memcached
 
 prometheus_exporter_memcached_enable: yes
 prometheus_exporter_memcached_groupname: memcached
 
-prometheus_exporter_memcached_port: 9150
+prometheus_exporter_memcached_host: "{{ ansible_default_ipv4.address }}"
+prometheus_exporter_memcached_port: 9103

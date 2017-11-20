@@ -1,5 +1,5 @@
 ---
-- name: prometheus-exporter - copy node-exporter binary
+- name: prometheus-exporter - node-exporter - copy binary
   copy:
     src: node-exporter/node_exporter
     dest: /usr/sbin/node_exporter
@@ -9,7 +9,7 @@
   become: true
   notify: Restart node_exporter service
 
-- name: prometheus-exporter - copy service file
+- name: prometheus-exporter - node-exporter - copy service file
   copy:
     src: node-exporter/node_exporter.service
     dest: /etc/systemd/system/node_exporter.service
@@ -19,7 +19,7 @@
   become: true
   notify: Restart node_exporter service
 
-- name: prometheus-exporter - copy defaults file
+- name: prometheus-exporter - node-exporter - copy defaults file
   template:
     src: node-exporter/node_exporter.defaults.j2
     dest: /etc/default/node_exporter
@@ -29,13 +29,13 @@
   become: true
   notify: Restart node_exporter service
 
-- name: prometheus-exporter - create node_exporter user
+- name: prometheus-exporter - node-exporter - create user
   user:
     name: node_exporter
     shell: /usr/sbin/nologin
   become: true
 
-- name: prometheus-exporter - enable/start node_exporter service
+- name: prometheus-exporter - node-exporter - enable/start service
   systemd:
     name: node_exporter
     state: started
