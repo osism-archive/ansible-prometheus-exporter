@@ -18,7 +18,7 @@
     - "{{ prometheus_exporter_docker_compose_directory }}"
     - "{{ prometheus_exporter_configuration_directory }}"
 
-- name: prometheus-exporter - create required directories (mariadb)
+- name: prometheus-exporter - mariadb - create required directories
   file:
     path: "{{ item }}"
     state: directory
@@ -46,16 +46,44 @@
     - prometheus_exporter_mariadb_enable|bool
     - prometheus_exporter_mariadb_groupname in group_names
 
-- name: prometheus-exporter - cadvisor - install required packages
+- name: prometheus-exporter - nginx - install required packages
   package:
     name: "{{ item }}"
     state: present
   become: true
   with_items:
     - python-passlib
-  when:
-    - prometheus_exporter_cadvisor_enable|bool
-    - (prometheus_exporter_cadvisor_groupname in group_names or prometheus_exporter_cadvisor_groupname == 'all')
+
+- name: prometheus-exporter - nginx - create required directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0750
+  become: true
+  with_items:
+    - "{{ prometheus_exporter_configuration_directory }}/nginx"
+
+- name: prometheus-exporter - nginx - prepare auth file
+  htpasswd:
+    path: "{{ prometheus_exporter_configuration_directory }}/nginx/htpasswd.nginx"
+    name: "{{ prometheus_exporter_nginx_username }}"
+    password: "{{ prometheus_exporter_nginx_password }}"
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+
+- name: prometheus-exporter - nginx - copy configuration files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ prometheus_exporter_configuration_directory }}/{{ item.dest }}"
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+  with_items:
+    - src: nginx/nginx.conf.j2
+      dest: nginx/nginx.conf
 
 - name: prometheus-exporter - cadvisor - create required directories
   file:
@@ -68,8 +96,9 @@
   with_items:
     - "{{ prometheus_exporter_configuration_directory }}/cadvisor"
   when:
-    - prometheus_exporter_cadvisor_enable|bool
-    - (prometheus_exporter_cadvisor_groupname in group_names or prometheus_exporter_cadvisor_groupname == 'all')
+    - prometheus_exporter_mariadb_enable|bool
+    - prometheus_exporter_cadvisor_enable_webinterface|bool
+    - (prometheus_exporter_mariadb_groupname in group_names or prometheus_exporter_mariadb_groupname == 'all')
 
 - name: prometheus-exporter - cadvisor - prepare auth file
   htpasswd:
@@ -80,8 +109,9 @@
     group: "{{ operator_group }}"
     mode: 0640
   when:
-    - prometheus_exporter_cadvisor_enable|bool
-    - (prometheus_exporter_cadvisor_groupname in group_names or prometheus_exporter_cadvisor_groupname == 'all')
+    - prometheus_exporter_mariadb_enable|bool
+    - prometheus_exporter_cadvisor_enable_webinterface|bool
+    - (prometheus_exporter_mariadb_groupname in group_names or prometheus_exporter_mariadb_groupname == 'all')
 
 - name: prometheus-exporter - copy docker-compose.yml file
   template:

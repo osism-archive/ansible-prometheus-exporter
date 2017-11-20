@@ -1,0 +1,21 @@
+server {
+    listen       80;
+    server_name  prometheus_exporter;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+
+    location /metrics/cadvisor {
+        proxy_pass   http://cadvisor:8080/metrics;
+    }
+
+    location /metrics/node {
+        proxy_pass   http://{{ prometheus_exporter_node_exporter_host }}:{{ prometheus_exporter_node_exporter_port }}/metrics;
+    }
+
+    location /metrics/mariadb {
+        proxy_pass   http://mariadb:9104/metrics;
+    }
+}
