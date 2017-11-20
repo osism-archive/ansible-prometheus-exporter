@@ -1,11 +1,11 @@
 ---
-- name: prometheus-exporter - prepare exporter services
-  include: service.yml
-  when: (prometheus_exporter_mariadb_enable|bool and (prometheus_exporter_mariadb_groupname in group_names or prometheus_exporter_mariadb_groupname == 'all')) or
-        (prometheus_exporter_cadvisor_enable|bool and (prometheus_exporter_cadvisor_groupname in group_names or prometheus_exporter_cadvisor_groupname == 'all'))
-
 - name: prometheus-exporter - prepare node-exporter service
   include: node-exporter.yml
   when:
     - prometheus_exporter_node_exporter_enable|bool
     - prometheus_exporter_node_exporter_groupname in group_names or prometheus_exporter_node_exporter_groupname == 'all'
+
+- name: prometheus-exporter - prepare exporter services
+  include: service.yml
+  when: (prometheus_exporter_mariadb_enable|bool and (prometheus_exporter_mariadb_groupname in group_names or prometheus_exporter_mariadb_groupname == 'all')) or
+        (prometheus_exporter_cadvisor_enable|bool and (prometheus_exporter_cadvisor_groupname in group_names or prometheus_exporter_cadvisor_groupname == 'all'))
