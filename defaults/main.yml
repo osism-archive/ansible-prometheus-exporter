@@ -91,3 +91,9 @@ prometheus_exporter_cadvisor_password: password
 
 prometheus_exporter_memcached_enable: yes
 prometheus_exporter_memcached_groupname: memcached
+
+prometheus_exporter_memcached_tag: latest
+prometheus_exporter_memcached_image: "{{ docker_registry }}/prom/memcached-exporter:{{ prometheus_exporter_memcached_tag }}"
+
+prometheus_exporter_memcached_target_address: "{{ ansible_default_ipv4.address }}"
+prometheus_exporter_memcached_target_port: 11211

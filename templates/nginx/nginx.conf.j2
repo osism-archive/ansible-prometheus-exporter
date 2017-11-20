@@ -24,4 +24,10 @@ server {
         proxy_pass   http://mariadb:9104/metrics;
     }
 {% endif %}
+
+{% if prometheus_exporter_memcached_enable|bool and (prometheus_exporter_memcached_groupname in group_names or prometheus_exporter_memcached_groupname == 'all') %}
+    location /metrics/memcached {
+        proxy_pass   http://memcached:9150/metrics;
+    }
+{% endif %}
 }

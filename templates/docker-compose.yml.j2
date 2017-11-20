@@ -40,3 +40,12 @@ services:
       - "/etc/hosts:/etc/hosts:ro"
       - "{{ prometheus_exporter_configuration_directory }}/mariadb/my.cnf:/root/.my.cnf:ro"
 {% endif %}
+
+{% if prometheus_exporter_memcached_enable|bool and (prometheus_exporter_memcached_groupname in group_names or prometheus_exporter_memcached_groupname == 'all') %}
+  memcached:
+    restart: unless-stopped
+    image: "{{ prometheus_exporter_memcached_image }}"
+    entrypoint: "/bin/memcached_exporter -memcached.address {{ prometheus_exporter_memcached_target_address }}:{{ prometheus_exporter_memcached_target_port }}"
+    volumes:
+      - "/etc/hosts:/etc/hosts:ro"
+{% endif %}
