@@ -15,7 +15,9 @@ services:
     restart: unless-stopped
     image: "{{ prometheus_exporter_cadvisor_image }}"
 {% if prometheus_exporter_cadvisor_enable_webinterface|bool %}
-    entrypoint: "/usr/bin/cadvisor -http_auth_file=/etc/htpasswd.cadvisor"
+    entrypoint: "/usr/bin/cadvisor -http_auth_file=/etc/htpasswd.cadvisor -docker_only"
+{% else %}
+    entrypoint: "/usr/bin/cadvisor -docker_only"
 {% endif %}
     volumes:
       - "/etc/hosts:/etc/hosts:ro"
