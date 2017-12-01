@@ -27,6 +27,7 @@ operator_group: "{{ operator_user }}"
 
 ##########################
 
+prometheus_exporter_nginx_authentication: no
 prometheus_exporter_nginx_username: prometheus
 prometheus_exporter_nginx_password: password
 
