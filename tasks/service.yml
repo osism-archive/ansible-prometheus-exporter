@@ -98,9 +98,9 @@
   with_items:
     - "{{ prometheus_exporter_configuration_directory }}/cadvisor"
   when:
-    - prometheus_exporter_mariadb_enable|bool
+    - prometheus_exporter_cadvisor_enable|bool
     - prometheus_exporter_cadvisor_enable_webinterface|bool
-    - (prometheus_exporter_mariadb_groupname in group_names or prometheus_exporter_mariadb_groupname == 'all')
+    - (prometheus_exporter_cadvisor_groupname in group_names or prometheus_exporter_cadvisor_groupname == 'all')
 
 - name: prometheus-exporter - cadvisor - prepare auth file
   htpasswd:
@@ -111,9 +111,9 @@
     group: "{{ operator_group }}"
     mode: 0640
   when:
-    - prometheus_exporter_mariadb_enable|bool
+    - prometheus_exporter_cadvisor_enable|bool
     - prometheus_exporter_cadvisor_enable_webinterface|bool
-    - (prometheus_exporter_mariadb_groupname in group_names or prometheus_exporter_mariadb_groupname == 'all')
+    - (prometheus_exporter_cadvisor_groupname in group_names or prometheus_exporter_cadvisor_groupname == 'all')
 
 - name: prometheus-exporter - copy docker-compose.yml file
   template:
