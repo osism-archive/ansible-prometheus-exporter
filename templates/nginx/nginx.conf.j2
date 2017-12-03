@@ -20,7 +20,7 @@ server {
 {% endif %}
 
 {% if prometheus_exporter_node_exporter_enable|bool and (prometheus_exporter_node_exporter_groupname in group_names or prometheus_exporter_node_exporter_groupname == 'all') %}
-    location /metrics/node {
+    location /metrics/node-exporter {
         proxy_pass   http://{{ prometheus_exporter_node_exporter_host }}:{{ prometheus_exporter_node_exporter_port }}/metrics;
     }
 {% endif %}
