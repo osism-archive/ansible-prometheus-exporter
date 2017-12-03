@@ -49,7 +49,7 @@ prometheus_exporter_mariadb_groupname: mariadb
 prometheus_exporter_mariadb_tag: master
 prometheus_exporter_mariadb_image: "{{ docker_registry }}/prom/mysqld-exporter:{{ prometheus_exporter_mariadb_tag }}"
 
-prometheus_exporter_mariadb_target_address: "{{ ansible_default_ipv4.address }}"
+prometheus_exporter_mariadb_target_host: "{{ ansible_default_ipv4.address }}"
 prometheus_exporter_mariadb_target_port: 3306
 prometheus_exporter_mariadb_target_protocol: tcp
 
@@ -98,7 +98,7 @@ prometheus_exporter_memcached_groupname: memcached
 prometheus_exporter_memcached_tag: latest
 prometheus_exporter_memcached_image: "{{ docker_registry }}/prom/memcached-exporter:{{ prometheus_exporter_memcached_tag }}"
 
-prometheus_exporter_memcached_target_address: "{{ ansible_default_ipv4.address }}"
+prometheus_exporter_memcached_target_host: "{{ ansible_default_ipv4.address }}"
 prometheus_exporter_memcached_target_port: 11211
 
 ##########################
@@ -107,7 +107,7 @@ prometheus_exporter_memcached_target_port: 11211
 prometheus_exporter_rabbitmq_enable: yes
 prometheus_exporter_rabbitmq_groupname: rabbitmq
 
-prometheus_exporter_rabbitmq_target_address: "{{ ansible_default_ipv4.address }}"
+prometheus_exporter_rabbitmq_target_host: "{{ ansible_default_ipv4.address }}"
 prometheus_exporter_rabbitmq_target_port: 15672
 
 ##########################
@@ -116,5 +116,5 @@ prometheus_exporter_rabbitmq_target_port: 15672
 prometheus_exporter_elasticsearch_enable: yes
 prometheus_exporter_elasticsearch_groupname: elasticsearch
 
-prometheus_exporter_elasticsearch_target_address: "{{ ansible_default_ipv4.address }}"
+prometheus_exporter_elasticsearch_target_host: "{{ ansible_default_ipv4.address }}"
 prometheus_exporter_elasticsearch_target_port: 9200
