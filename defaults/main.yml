@@ -100,3 +100,21 @@ prometheus_exporter_memcached_image: "{{ docker_registry }}/prom/memcached-expor
 
 prometheus_exporter_memcached_target_address: "{{ ansible_default_ipv4.address }}"
 prometheus_exporter_memcached_target_port: 11211
+
+##########################
+# rabbitmq
+
+prometheus_exporter_rabbitmq_enable: yes
+prometheus_exporter_rabbitmq_groupname: rabbitmq
+
+prometheus_exporter_rabbitmq_target_address: "{{ ansible_default_ipv4.address }}"
+prometheus_exporter_rabbitmq_target_port: 15672
+
+##########################
+# elasticsearch
+
+prometheus_exporter_elasticsearch_enable: yes
+prometheus_exporter_elasticsearch_groupname: elasticsearch
+
+prometheus_exporter_elasticsearch_target_address: "{{ ansible_default_ipv4.address }}"
+prometheus_exporter_elasticsearch_target_port: 9200

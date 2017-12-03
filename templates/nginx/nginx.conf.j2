@@ -42,4 +42,16 @@ server {
         proxy_pass   http://haproxy:9101/metrics;
     }
 {% endif %}
+
+{% if prometheus_exporter_rabbitmq_exporter_enable|bool and (prometheus_exporter_rabbitmq_exporter_groupname in group_names or prometheus_exporter_rabbitmq_exporter_groupname == 'all') %}
+    location /metrics/rabbitmq {
+        proxy_pass   http://{{ prometheus_exporter_rabbitmq_exporter_target_host }}:{{ prometheus_exporter_rabbitmq_exporter_target_port }}/api/metrics;
+    }
+{% endif %}
+
+{% if prometheus_exporter_elasticsearch_exporter_enable|bool and (prometheus_exporter_elasticsearch_exporter_groupname in group_names or prometheus_exporter_elasticsearch_exporter_groupname == 'all') %}
+    location /metrics/elasticsearch {
+        proxy_pass   http://{{ prometheus_exporter_elasticsearch_exporter_target_host }}:{{ prometheus_exporter_elasticsearch_exporter_target_port }}/_prometheus/metrics;
+    }
+{% endif %}
 }
