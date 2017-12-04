@@ -7,6 +7,12 @@ server {
         index  index.html index.htm;
     }
 
+{% if prometheus_exporter_prometheus_enable|bool and (prometheus_exporter_prometheus_groupname in group_names or prometheus_exporter_prometheus_groupname == 'all') %}
+    location /metrics/prometheus {
+        proxy_pass   http://{{ prometheus_exporter_prometheus_target_host }}:{{ prometheus_exporter_prometheus_target_port }}/metrics;
+    }
+{% endif %}
+
 {% if prometheus_exporter_cadvisor_enable|bool and (prometheus_exporter_cadvisor_groupname in group_names or prometheus_exporter_cadvisor_groupname == 'all') %}
     location /metrics/cadvisor {
         proxy_pass   http://cadvisor:8080/metrics;

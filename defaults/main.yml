@@ -118,3 +118,12 @@ prometheus_exporter_elasticsearch_groupname: elasticsearch
 
 prometheus_exporter_elasticsearch_target_host: 127.0.0.1
 prometheus_exporter_elasticsearch_target_port: 9200
+
+##########################
+# prometheus
+
+prometheus_exporter_prometheus_enable: yes
+prometheus_exporter_prometheus_groupname: prometheus
+
+prometheus_exporter_prometheus_target_host: 127.0.0.1
+prometheus_exporter_prometheus_target_port: 9090
