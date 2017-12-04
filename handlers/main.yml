@@ -5,7 +5,7 @@
     state: restarted
     daemon_reload: yes
 
-- name: Restart exporter services
+- name: Restart service
   docker_service:
     project_name: prometheus-exporter
     project_src: "{{ prometheus_exporter_docker_compose_directory }}"

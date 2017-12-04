@@ -42,7 +42,7 @@
   with_items:
     - src: mariadb/my.cnf.j2
       dest: mariadb/my.cnf
-  notify: Restart exporter services
+  notify: Restart service
   when:
     - prometheus_exporter_mariadb_enable|bool
     - prometheus_exporter_mariadb_groupname in group_names
@@ -84,7 +84,7 @@
     owner: "{{ operator_user }}"
     group: "{{ operator_group }}"
     mode: 0640
-  notify: Restart exporter services
+  notify: Restart service
   with_items:
     - src: nginx/nginx.conf.j2
       dest: nginx/nginx.conf
