@@ -65,7 +65,12 @@ prometheus_exporter_haproxy_groupname: haproxy
 prometheus_exporter_haproxy_tag: latest
 prometheus_exporter_haproxy_image: "{{ docker_registry }}/prom/haproxy-exporter:{{ prometheus_exporter_haproxy_tag }}"
 
-prometheus_exporter_haproxy_volume_socket: haproxy_socket
+prometheus_exporter_haproxy_target_host: 127.0.0.1
+prometheus_exporter_haproxy_target_port: 1984
+prometheus_exporter_haproxy_target_protocol: http
+
+prometheus_exporter_haproxy_target_username: haproxy
+prometheus_exporter_haproxy_target_password: password
 
 ##########################
 # node-exporter

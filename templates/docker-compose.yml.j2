@@ -54,14 +54,7 @@ services:
   haproxy:
     restart: unless-stopped
     image: "{{ prometheus_exporter_haproxy_image }}"
-    entrypoint: "/bin/haproxy_exporter --haproxy.scrape-uri=unix:/haproxy.sock"
+    entrypoint: "/bin/haproxy_exporter --haproxy.scrape-uri={{ prometheus_exporter_haproxy_target_protocol }}://{{ prometheus_exporter_haproxy_target_username }}:{{ prometheus_exporter_haproxy_target_password }}@{{ prometheus_exporter_haproxy_target_host }}:{{ prometheus_exporter_haproxy_target_port }}/?stats;csv"
     volumes:
       - "/etc/hosts:/etc/hosts:ro"
-      - "{{ prometheus_exporter_haproxy_volume_socket }}:/haproxy.sock:ro"
-{% endif %}
-
-{% if prometheus_exporter_haproxy_enable|bool and (prometheus_exporter_haproxy_groupname in group_names or prometheus_exporter_haproxy_groupname == 'all') %}
-volumes:
-  {{ prometheus_exporter_haproxy_volume_socket }}:
-    external: true
 {% endif %}
