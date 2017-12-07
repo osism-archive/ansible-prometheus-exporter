@@ -4,6 +4,7 @@
     name: node_exporter
     state: restarted
     daemon_reload: yes
+  become: true
 
 - name: Restart service
   docker_service:
