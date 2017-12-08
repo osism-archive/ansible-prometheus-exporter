@@ -50,7 +50,7 @@
 - name: prometheus-exporter - copy - copy keyring file
   copy:
     src: "{{ prometheus_exporter_ceph_keyring_path }}"
-    dest: "{{ prometheus_exporter_configuration_directory }}/ceph/{{ prometheus_exporter_ceph_keyring_name }}/{{ prometheus_exporter_ceph_keyring_path|basename }}"
+    dest: "{{ prometheus_exporter_configuration_directory }}/ceph/{{ prometheus_exporter_ceph_keyring_path|basename }}"
     owner: "{{ operator_user }}"
     group: "{{ operator_group }}"
     mode: 0640

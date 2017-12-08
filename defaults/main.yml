@@ -41,7 +41,7 @@ prometheus_exporter_nginx_port: 9100
 # ceph
 
 # NOTE(berendt): only use the ceph_exporter with ceph_version <= kraken
-                 use the ceph-mgr exporter with ceph_version >= kraken
+#                use the ceph-mgr exporter with ceph_version >= kraken
 
 prometheus_exporter_ceph_enable: no
 prometheus_exporter_ceph_groupname: ceph-mon
