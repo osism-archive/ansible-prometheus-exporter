@@ -18,6 +18,47 @@
     - "{{ prometheus_exporter_docker_compose_directory }}"
     - "{{ prometheus_exporter_configuration_directory }}"
 
+- name: prometheus-exporter - ceph - create required directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0750
+  become: true
+  with_items:
+    - "{{ prometheus_exporter_configuration_directory }}/ceph"
+  when:
+    - prometheus_exporter_ceph_enable|bool
+    - prometheus_exporter_ceph_groupname in group_names
+
+- name: prometheus-exporter - copy - copy configuration files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ prometheus_exporter_configuration_directory }}/{{ item.dest }}"
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+  with_items:
+    - src: ceph/ceph.conf.j2
+      dest: ceph/ceph.conf
+  notify: Restart service
+  when:
+    - prometheus_exporter_ceph_enable|bool
+    - prometheus_exporter_ceph_groupname in group_names
+
+- name: prometheus-exporter - copy - copy keyring file
+  copy:
+    src: "{{ prometheus_exporter_ceph_keyring_path }}"
+    dest: "{{ prometheus_exporter_configuration_directory }}/ceph/{{ prometheus_exporter_ceph_keyring_name }}/{{ prometheus_exporter_ceph_keyring_path|basename }}"
+    owner: "{{ operator_user }}"
+    group: "{{ operator_group }}"
+    mode: 0640
+  notify: Restart service
+  when:
+    - prometheus_exporter_ceph_enable|bool
+    - prometheus_exporter_ceph_groupname in group_names
+
 - name: prometheus-exporter - mariadb - create required directories
   file:
     path: "{{ item }}"

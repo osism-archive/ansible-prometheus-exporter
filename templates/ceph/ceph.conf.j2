@@ -1,0 +1,6 @@
+[global]
+mon host = {% for host in groups[prometheus_exporter_ceph_groupname] %}{{ hostvars[host]['ansible_' + hostvars[host]['storage_interface']]['ipv4']['address'] }}{% if not loop.last %},{% endif %}{% endfor %}
+
+public network = {{ prometheus_exporter_ceph_public_network }}
+max open files = 131072
+fsid = {{ prometheus_exporter_ceph_cluster_fsid }}

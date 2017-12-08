@@ -40,6 +40,19 @@ prometheus_exporter_nginx_port: 9100
 ##########################
 # ceph
 
+# NOTE(berendt): only use the ceph_exporter with ceph_version <= kraken
+                 use the ceph-mgr exporter with ceph_version >= kraken
+
+prometheus_exporter_ceph_enable: no
+prometheus_exporter_ceph_groupname: ceph-mon
+
+prometheus_exporter_ceph_tag: latest
+prometheus_exporter_ceph_image: "{{ docker_registry }}/digitalocean/ceph_exporter:{{ prometheus_exporter_ceph_tag }}"
+
+prometheus_exporter_ceph_cluster_fsid: 81337d16-f7f3-48fa-bd12-8d2320286b30
+prometheus_exporter_ceph_keyring_path: "/path/to/the/keyring/file"
+prometheus_exporter_ceph_public_network: 192.168.0.0/24
+
 ##########################
 # mariadb
 

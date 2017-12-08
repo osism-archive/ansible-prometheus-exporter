@@ -49,6 +49,12 @@ server {
     }
 {% endif %}
 
+{% if prometheus_exporter_ceph_enable|bool and (prometheus_exporter_ceph_groupname in group_names or prometheus_exporter_ceph_groupname == 'all') %}
+    location /metrics/ceph {
+        proxy_pass   http://ceph:9128/metrics;
+    }
+{% endif %}
+
 {% if prometheus_exporter_rabbitmq_enable|bool and (prometheus_exporter_rabbitmq_groupname in group_names or prometheus_exporter_rabbitmq_groupname == 'all') %}
     location /metrics/rabbitmq {
         proxy_pass   http://{{ prometheus_exporter_rabbitmq_target_host }}:{{ prometheus_exporter_rabbitmq_target_port }}/api/metrics;

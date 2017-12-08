@@ -41,6 +41,16 @@ services:
       - "{{ prometheus_exporter_configuration_directory }}/mariadb/my.cnf:/root/.my.cnf:ro"
 {% endif %}
 
+{% if prometheus_exporter_ceph_enable|bool and (prometheus_exporter_ceph_groupname in group_names or prometheus_exporter_ceph_groupname == 'all') %}
+  ceph:
+    restart: unless-stopped
+    image: "{{ prometheus_exporter_ceph_image }}"
+#    entrypoint: "/bin/mysqld_exporter -collect.binlog_size=true -collect.info_schema.processlist=true -collect.info_schema.userstats=true"
+    volumes:
+      - "/etc/hosts:/etc/hosts:ro"
+      - "{{ prometheus_exporter_configuration_directory }}/ceph:/etc/ceph:ro"
+{% endif %}
+
 {% if prometheus_exporter_memcached_enable|bool and (prometheus_exporter_memcached_groupname in group_names or prometheus_exporter_memcached_groupname == 'all') %}
   memcached:
     restart: unless-stopped
