@@ -25,9 +25,9 @@ server {
     }
 {% endif %}
 
-{% if prometheus_exporter_node_exporter_enable|bool and (prometheus_exporter_node_exporter_groupname in group_names or prometheus_exporter_node_exporter_groupname == 'all') %}
-    location /metrics/node-exporter {
-        proxy_pass   http://{{ prometheus_exporter_node_exporter_host }}:{{ prometheus_exporter_node_exporter_port }}/metrics;
+{% if prometheus_exporter_node_enable|bool and (prometheus_exporter_node_groupname in group_names or prometheus_exporter_node_groupname == 'all') %}
+    location /metrics/node {
+        proxy_pass   http://{{ prometheus_exporter_node_host }}:{{ prometheus_exporter_node_port }}/metrics;
     }
 {% endif %}
 

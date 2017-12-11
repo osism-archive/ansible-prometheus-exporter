@@ -86,13 +86,13 @@ prometheus_exporter_haproxy_target_username: haproxy
 prometheus_exporter_haproxy_target_password: password
 
 ##########################
-# node-exporter
+# node
 
-prometheus_exporter_node_exporter_enable: yes
-prometheus_exporter_node_exporter_groupname: all
+prometheus_exporter_node_enable: yes
+prometheus_exporter_node_groupname: all
 
-prometheus_exporter_node_exporter_host: 127.0.0.1
-prometheus_exporter_node_exporter_port: 9102
+prometheus_exporter_node_host: 127.0.0.1
+prometheus_exporter_node_port: 9102
 
 ##########################
 # cadvisor
