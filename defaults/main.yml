@@ -6,6 +6,7 @@
 
 prometheus_exporter_configuration_directory: /opt/prometheus-exporter/configuration
 prometheus_exporter_docker_compose_directory: /opt/prometheus-exporter
+prometheus_exporter_textfile_directory: /var/lib/node_exporter
 
 ##########################
 # packages
@@ -93,6 +94,16 @@ prometheus_exporter_node_groupname: all
 
 prometheus_exporter_node_host: 127.0.0.1
 prometheus_exporter_node_port: 9102
+
+# smartmon
+
+prometheus_exporter_smartmon_enable: yes
+prometheus_exporter_smartmon_groupname: all
+
+prometheus_exporter_smartmon_minute: "*"
+
+required_packages_prometheus_exporter_smartmon:
+  - smartmontools
 
 ##########################
 # cadvisor

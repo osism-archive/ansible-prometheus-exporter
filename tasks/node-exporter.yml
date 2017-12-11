@@ -1,4 +1,55 @@
 ---
+- name: prometheus-exporter - node-exporter - create user
+  user:
+    name: node_exporter
+    shell: /usr/sbin/nologin
+  become: true
+
+- name: prometheus-exporter - node-exporter - create required directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: node_exporter
+    group: node_exporter
+    mode: 0750
+  become: true
+  with_items:
+    - "{{ prometheus_exporter_textfile_directory }}"
+
+- name: prometheus-exporter - node-exporter(smartmon) - install required packages
+  package:
+    name: "{{ item }}"
+    state: present
+  become: true
+  with_items: "{{ required_packages_prometheus_exporter_smartmon }}"
+  when:
+    - prometheus_exporter_smartmon_enable|bool
+    - prometheus_exporter_smartmon_groupname in group_names or prometheus_exporter_smartmon_groupname == 'all'
+
+- name: prometheus-exporter - node-exporter(smartmon) - copy script
+  copy:
+    src: node-exporter/node_exporter-smartmon
+    dest: /usr/sbin/node_exporter-smartmon
+    owner: root
+    group: root
+    mode: 0755
+  become: true
+  when:
+    - prometheus_exporter_smartmon_enable|bool
+    - prometheus_exporter_smartmon_groupname in group_names or prometheus_exporter_smartmon_groupname == 'all'
+
+- name: prometheus-exporter - node-exporter(smartmon) - create cronjob
+  cron:
+    name: node_exporter-smartmon
+    minute: "{{ prometheus_exporter_smartmon_minute }}"
+    user: root
+    job: "/usr/sbin/node_exporter-smartmon > {{ prometheus_exporter_textfile_directory }}/node_exporter-smartmon.prom"
+    cron_file: node_exporter-smartmon
+  become: true
+  when:
+    - prometheus_exporter_smartmon_enable|bool
+    - prometheus_exporter_smartmon_groupname in group_names or prometheus_exporter_smartmon_groupname == 'all'
+
 - name: prometheus-exporter - node-exporter - copy binary
   copy:
     src: node-exporter/node_exporter
@@ -28,12 +79,6 @@
     mode: 0644
   become: true
   notify: Restart node_exporter service
-
-- name: prometheus-exporter - node-exporter - create user
-  user:
-    name: node_exporter
-    shell: /usr/sbin/nologin
-  become: true
 
 - name: prometheus-exporter - node-exporter - enable/start service
   systemd:
