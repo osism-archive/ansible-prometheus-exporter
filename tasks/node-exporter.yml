@@ -16,6 +16,8 @@
   with_items:
     - "{{ prometheus_exporter_textfile_directory }}"
 
+# smartmon
+
 - name: prometheus-exporter - node-exporter(smartmon) - install required packages
   package:
     name: "{{ item }}"
@@ -49,6 +51,54 @@
   when:
     - prometheus_exporter_smartmon_enable|bool
     - prometheus_exporter_smartmon_groupname in group_names or prometheus_exporter_smartmon_groupname == 'all'
+
+# ipmitool
+
+- name: prometheus-exporter - node-exporter(ipmitool) - install required packages
+  package:
+    name: "{{ item }}"
+    state: present
+  become: true
+  with_items: "{{ required_packages_prometheus_exporter_ipmitool }}"
+  when:
+    - prometheus_exporter_ipmitool_enable|bool
+    - prometheus_exporter_ipmitool_groupname in group_names or prometheus_exporter_ipmitool_groupname == 'all'
+
+- name: prometheus-exporter - node-exporter(ipmitool) - load required modules
+  modprobe:
+    name: "{{ item }}"
+    state: present
+  become: true
+  with_items: "{{ required_modules_prometheus_exporter_ipmitool }}"
+  when:
+    - prometheus_exporter_ipmitool_enable|bool
+    - prometheus_exporter_ipmitool_groupname in group_names or prometheus_exporter_ipmitool_groupname == 'all'
+
+- name: prometheus-exporter - node-exporter(ipmitool) - copy script
+  copy:
+    src: node-exporter/node_exporter-ipmitool
+    dest: /usr/sbin/node_exporter-ipmitool
+    owner: root
+    group: root
+    mode: 0755
+  become: true
+  when:
+    - prometheus_exporter_ipmitool_enable|bool
+    - prometheus_exporter_ipmitool_groupname in group_names or prometheus_exporter_ipmitool_groupname == 'all'
+
+- name: prometheus-exporter - node-exporter(ipmitool) - create cronjob
+  cron:
+    name: node_exporter-ipmitool
+    minute: "{{ prometheus_exporter_ipmitool_minute }}"
+    user: root
+    job: "ipmitool sensor | awk -f /usr/sbin/node_exporter-ipmitool > {{ prometheus_exporter_textfile_directory }}/node_exporter-ipmitool.prom"
+    cron_file: node_exporter-ipmitool
+  become: true
+  when:
+    - prometheus_exporter_ipmitool_enable|bool
+    - prometheus_exporter_ipmitool_groupname in group_names or prometheus_exporter_ipmitool_groupname == 'all'
+
+# node-exporter
 
 - name: prometheus-exporter - node-exporter - copy binary
   copy:

@@ -105,6 +105,20 @@ prometheus_exporter_smartmon_minute: "*"
 required_packages_prometheus_exporter_smartmon:
   - smartmontools
 
+# ipmitool
+
+prometheus_exporter_ipmitool_enable: yes
+prometheus_exporter_ipmitool_groupname: all
+
+prometheus_exporter_ipmitool_minute: "*"
+
+required_packages_prometheus_exporter_ipmitool:
+  - ipmitool
+
+required_modules_prometheus_exporter_ipmitool:
+  - ipmi_devintf
+  - ipmi_si
+
 ##########################
 # cadvisor
 
