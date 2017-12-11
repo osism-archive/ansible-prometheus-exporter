@@ -64,6 +64,17 @@
     - prometheus_exporter_ipmitool_enable|bool
     - prometheus_exporter_ipmitool_groupname in group_names or prometheus_exporter_ipmitool_groupname == 'all'
 
+- name: prometheus-exporter - node-exporter(ipmitool) - enable required modules
+  lineinfile:
+    line: "{{ item }}"
+    state: present
+    dest: /etc/modules
+  become: true
+  with_items: "{{ required_modules_prometheus_exporter_ipmitool }}"
+  when:
+    - prometheus_exporter_ipmitool_enable|bool
+    - prometheus_exporter_ipmitool_groupname in group_names or prometheus_exporter_ipmitool_groupname == 'all'
+
 - name: prometheus-exporter - node-exporter(ipmitool) - load required modules
   modprobe:
     name: "{{ item }}"
