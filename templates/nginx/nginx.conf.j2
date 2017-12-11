@@ -6,64 +6,54 @@ server {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
     }
-
 {% if prometheus_exporter_prometheus_enable|bool and (prometheus_exporter_prometheus_groupname in group_names or prometheus_exporter_prometheus_groupname == 'all') %}
     location /metrics/prometheus {
         proxy_pass   http://{{ prometheus_exporter_prometheus_target_host }}:{{ prometheus_exporter_prometheus_target_port }}/metrics;
     }
-{% endif %}
-
+{% endif -%}
 {% if prometheus_exporter_cadvisor_enable|bool and (prometheus_exporter_cadvisor_groupname in group_names or prometheus_exporter_cadvisor_groupname == 'all') %}
     location /metrics/cadvisor {
         proxy_pass   http://cadvisor:8080/metrics;
     }
-{% endif %}
-
+{% endif -%}
 {% if prometheus_exporter_cadvisor_enable|bool and prometheus_exporter_cadvisor_enable_webinterface|bool  and (prometheus_exporter_cadvisor_groupname in group_names or prometheus_exporter_cadvisor_groupname == 'all') %}
     location /cadvisor {
         proxy_pass   http://cadvisor:8080/containers;
     }
-{% endif %}
-
+{% endif -%}
 {% if prometheus_exporter_node_enable|bool and (prometheus_exporter_node_groupname in group_names or prometheus_exporter_node_groupname == 'all') %}
     location /metrics/node {
         proxy_pass   http://{{ prometheus_exporter_node_host }}:{{ prometheus_exporter_node_port }}/metrics;
     }
-{% endif %}
-
+{% endif -%}
 {% if prometheus_exporter_mariadb_enable|bool and (prometheus_exporter_mariadb_groupname in group_names or prometheus_exporter_mariadb_groupname == 'all') %}
     location /metrics/mariadb {
         proxy_pass   http://mariadb:9104/metrics;
     }
-{% endif %}
-
+{% endif -%}
 {% if prometheus_exporter_memcached_enable|bool and (prometheus_exporter_memcached_groupname in group_names or prometheus_exporter_memcached_groupname == 'all') %}
     location /metrics/memcached {
         proxy_pass   http://memcached:9150/metrics;
     }
-{% endif %}
-
+{% endif -%}
 {% if prometheus_exporter_haproxy_enable|bool and (prometheus_exporter_haproxy_groupname in group_names or prometheus_exporter_haproxy_groupname == 'all') %}
     location /metrics/haproxy {
         proxy_pass   http://haproxy:9101/metrics;
     }
-{% endif %}
-
+{% endif -%}
 {% if prometheus_exporter_ceph_enable|bool and (prometheus_exporter_ceph_groupname in group_names or prometheus_exporter_ceph_groupname == 'all') %}
     location /metrics/ceph {
         proxy_pass   http://ceph:9128/metrics;
     }
-{% endif %}
-
+{% endif -%}
 {% if prometheus_exporter_rabbitmq_enable|bool and (prometheus_exporter_rabbitmq_groupname in group_names or prometheus_exporter_rabbitmq_groupname == 'all') %}
     location /metrics/rabbitmq {
         proxy_pass   http://{{ prometheus_exporter_rabbitmq_target_host }}:{{ prometheus_exporter_rabbitmq_target_port }}/api/metrics;
     }
-{% endif %}
-
+{% endif -%}
 {% if prometheus_exporter_elasticsearch_enable|bool and (prometheus_exporter_elasticsearch_groupname in group_names or prometheus_exporter_elasticsearch_groupname == 'all') %}
     location /metrics/elasticsearch {
         proxy_pass   http://{{ prometheus_exporter_elasticsearch_target_host }}:{{ prometheus_exporter_elasticsearch_target_port }}/_prometheus/metrics;
     }
-{% endif %}
+{% endif -%}
 }

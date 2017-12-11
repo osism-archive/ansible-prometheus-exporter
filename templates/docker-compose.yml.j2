@@ -9,7 +9,6 @@ services:
       - "/etc/hosts:/etc/hosts:ro"
     ports:
       - "{{ prometheus_exporter_nginx_host }}:{{ prometheus_exporter_nginx_port }}:80"
-
 {% if prometheus_exporter_cadvisor_enable|bool and (prometheus_exporter_cadvisor_groupname in group_names or prometheus_exporter_cadvisor_groupname == 'all') %}
   cadvisor:
     restart: unless-stopped
@@ -29,8 +28,7 @@ services:
 {% if prometheus_exporter_cadvisor_enable_webinterface|bool %}
       - "{{ prometheus_exporter_configuration_directory }}/cadvisor/htpasswd.cadvisor:/etc/htpasswd.cadvisor:ro"
 {% endif %}
-{% endif %}
-
+{% endif -%}
 {% if prometheus_exporter_mariadb_enable|bool and (prometheus_exporter_mariadb_groupname in group_names or prometheus_exporter_mariadb_groupname == 'all') %}
   mariadb:
     restart: unless-stopped
@@ -39,18 +37,15 @@ services:
     volumes:
       - "/etc/hosts:/etc/hosts:ro"
       - "{{ prometheus_exporter_configuration_directory }}/mariadb/my.cnf:/root/.my.cnf:ro"
-{% endif %}
-
+{% endif -%}
 {% if prometheus_exporter_ceph_enable|bool and (prometheus_exporter_ceph_groupname in group_names or prometheus_exporter_ceph_groupname == 'all') %}
   ceph:
     restart: unless-stopped
     image: "{{ prometheus_exporter_ceph_image }}"
-#    entrypoint: "/bin/mysqld_exporter -collect.binlog_size=true -collect.info_schema.processlist=true -collect.info_schema.userstats=true"
     volumes:
       - "/etc/hosts:/etc/hosts:ro"
       - "{{ prometheus_exporter_configuration_directory }}/ceph:/etc/ceph:ro"
-{% endif %}
-
+{% endif -%}
 {% if prometheus_exporter_memcached_enable|bool and (prometheus_exporter_memcached_groupname in group_names or prometheus_exporter_memcached_groupname == 'all') %}
   memcached:
     restart: unless-stopped
@@ -58,8 +53,7 @@ services:
     entrypoint: "/bin/memcached_exporter -memcached.address {{ prometheus_exporter_memcached_target_host }}:{{ prometheus_exporter_memcached_target_port }}"
     volumes:
       - "/etc/hosts:/etc/hosts:ro"
-{% endif %}
-
+{% endif -%}
 {% if prometheus_exporter_haproxy_enable|bool and (prometheus_exporter_haproxy_groupname in group_names or prometheus_exporter_haproxy_groupname == 'all') %}
   haproxy:
     restart: unless-stopped
@@ -67,4 +61,4 @@ services:
     entrypoint: "/bin/haproxy_exporter --haproxy.scrape-uri={{ prometheus_exporter_haproxy_target_protocol }}://{{ prometheus_exporter_haproxy_target_username }}:{{ prometheus_exporter_haproxy_target_password }}@{{ prometheus_exporter_haproxy_target_host }}:{{ prometheus_exporter_haproxy_target_port }}/?stats;csv"
     volumes:
       - "/etc/hosts:/etc/hosts:ro"
-{% endif %}
+{% endif -%}
