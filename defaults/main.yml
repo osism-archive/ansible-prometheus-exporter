@@ -114,6 +114,7 @@ prometheus_exporter_ipmitool_minute: "*"
 
 required_packages_prometheus_exporter_ipmitool:
   - ipmitool
+  - gawk
 
 required_modules_prometheus_exporter_ipmitool:
   - ipmi_devintf
