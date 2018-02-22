@@ -12,7 +12,6 @@ prometheus_exporter_textfile_directory: /var/lib/node_exporter
 # packages
 
 required_packages_prometheus_exporter:
-  - docker-compose
   - python-docker
 
 ##########################
