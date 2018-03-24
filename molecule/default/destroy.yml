@@ -1,0 +1,76 @@
+---
+- name: Destroy
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  no_log: "{{ not lookup('env', 'MOLECULE_DEBUG') | bool }}"
+
+  tasks:
+    - name: Destroy molecule instance(s)
+      os_server:
+        cloud: molecule
+        name: "molecule{{ lookup('env', 'TRAVIS_JOB_ID')|default('') }}"
+        delete_fip: yes
+        state: absent
+      register: server
+      with_items: "{{ molecule_yml.platforms }}"
+      async: 7200
+      poll: 0
+
+    - name: Wait for instance(s) deletion to complete
+      async_status:
+        jid: "{{ item.ansible_job_id }}"
+      register: os_jobs
+      until: os_jobs.finished
+      retries: 300
+      with_items: "{{ server.results }}"
+
+    - name: Delete remote keypair
+      os_keypair:
+        cloud: molecule
+        name: "{{ keypair_name }}"
+        state: absent
+
+    - name: Delete routers
+      os_router:
+        cloud: molecule
+        name: "{{ item.name }}"
+        state: absent
+      with_items: "{{ neutron.routers }}"
+      run_once: true
+
+    - name: Delete subnets
+      os_subnet:
+        cloud: molecule
+        name: "{{ item.name }}"
+        state: absent
+      with_items: "{{ neutron.subnets }}"
+      run_once: true
+
+    - name: Delete networks
+      os_network:
+        cloud: molecule
+        name: "{{ item.name }}"
+        state: absent
+      with_items: "{{ neutron.networks }}"
+      run_once: true
+
+    - name: Delete security group
+      os_security_group:
+        cloud: molecule
+        name: "{{ security_group_name }}"
+        state: absent
+
+    # Mandatory configuration for Molecule to function.
+
+    - name: Populate instance config
+      set_fact:
+        instance_conf: {}
+
+    - name: Dump instance config
+      copy:
+        # NOTE(retr0h): Workaround for Ansible 2.2.
+        #               https://github.com/ansible/ansible/issues/20885
+        content: "{{ instance_conf | to_json | from_json | molecule_to_yaml | molecule_header }}"
+        dest: "{{ molecule_instance_config }}"
+      when: server.changed | bool
