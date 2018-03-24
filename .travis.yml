@@ -9,7 +9,7 @@ cache:
     - .tox
 
 before_install:
-  - openssl aes-256-cbc -K $encrypted_59794d2ceae5_key -iv $encrypted_59794d2ceae5_iv -in clouds.yml.enc -out clouds.yml -d
+  - openssl aes-256-cbc -K $encrypted_59794d2ceae5_key -iv $encrypted_59794d2ceae5_iv -in molecule/default/clouds.yml.enc -out molecule/default/clouds.yml -d
 
 install:
   - pip install -r test-requirements.txt
