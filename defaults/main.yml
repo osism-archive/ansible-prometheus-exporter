@@ -9,12 +9,6 @@ prometheus_exporter_docker_compose_directory: /opt/prometheus-exporter
 prometheus_exporter_textfile_directory: /var/lib/node_exporter
 
 ##########################
-# packages
-
-required_packages_prometheus_exporter:
-  - python-docker
-
-##########################
 # docker
 
 docker_registry: index.docker.io

@@ -7,7 +7,4 @@
   become: true
 
 - name: Restart service
-  docker_service:
-    project_name: prometheus-exporter
-    project_src: "{{ prometheus_exporter_docker_compose_directory }}"
-    restarted: true
+  command: "docker-compose -f {{ prometheus_exporter_docker_compose_directory }}/docker-compose.yml restart"
