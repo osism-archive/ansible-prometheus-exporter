@@ -16,5 +16,10 @@
 - name: Playbook for role preparations
   hosts: all
 
-  roles: []
+  vars:
+    docker_user: ubuntu
+
+  roles:
+    - role: osism.docker
+
   tasks: []
