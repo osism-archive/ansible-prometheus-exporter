@@ -2,5 +2,9 @@
 - name: Playbook for role testing
   hosts: all
 
+  vars:
+    operator_user: ubuntu
+    prometheus_exporter_ipmitool_enable: no
+
   roles:
     - role: ansible-prometheus-exporter
