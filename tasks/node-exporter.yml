@@ -1,11 +1,11 @@
 ---
-- name: prometheus-exporter - node-exporter - create user
+- name: node-exporter - create user
   user:
     name: node_exporter
     shell: /usr/sbin/nologin
   become: true
 
-- name: prometheus-exporter - node-exporter - create required directories
+- name: node-exporter - create required directories
   file:
     path: "{{ item }}"
     state: directory
@@ -18,7 +18,7 @@
 
 # smartmon
 
-- name: prometheus-exporter - node-exporter(smartmon) - install required packages
+- name: node-exporter(smartmon) - install required packages
   package:
     name: "{{ item }}"
     state: present
@@ -28,7 +28,7 @@
     - prometheus_exporter_smartmon_enable|bool
     - prometheus_exporter_smartmon_groupname in group_names or prometheus_exporter_smartmon_groupname == 'all'
 
-- name: prometheus-exporter - node-exporter(smartmon) - copy script
+- name: node-exporter(smartmon) - copy script
   copy:
     src: node-exporter/node_exporter-smartmon
     dest: /usr/sbin/node_exporter-smartmon
@@ -40,7 +40,7 @@
     - prometheus_exporter_smartmon_enable|bool
     - prometheus_exporter_smartmon_groupname in group_names or prometheus_exporter_smartmon_groupname == 'all'
 
-- name: prometheus-exporter - node-exporter(smartmon) - create cronjob
+- name: node-exporter(smartmon) - create cronjob
   cron:
     name: node_exporter-smartmon
     minute: "{{ prometheus_exporter_smartmon_minute }}"
@@ -54,7 +54,7 @@
 
 # ipmitool
 
-- name: prometheus-exporter - node-exporter(ipmitool) - install required packages
+- name: node-exporter(ipmitool) - install required packages
   package:
     name: "{{ item }}"
     state: present
@@ -64,7 +64,7 @@
     - prometheus_exporter_ipmitool_enable|bool
     - prometheus_exporter_ipmitool_groupname in group_names or prometheus_exporter_ipmitool_groupname == 'all'
 
-- name: prometheus-exporter - node-exporter(ipmitool) - enable required modules
+- name: node-exporter(ipmitool) - enable required modules
   lineinfile:
     line: "{{ item }}"
     state: present
@@ -75,7 +75,7 @@
     - prometheus_exporter_ipmitool_enable|bool
     - prometheus_exporter_ipmitool_groupname in group_names or prometheus_exporter_ipmitool_groupname == 'all'
 
-- name: prometheus-exporter - node-exporter(ipmitool) - load required modules
+- name: node-exporter(ipmitool) - load required modules
   modprobe:
     name: "{{ item }}"
     state: present
@@ -85,7 +85,7 @@
     - prometheus_exporter_ipmitool_enable|bool
     - prometheus_exporter_ipmitool_groupname in group_names or prometheus_exporter_ipmitool_groupname == 'all'
 
-- name: prometheus-exporter - node-exporter(ipmitool) - copy script
+- name: node-exporter(ipmitool) - copy script
   copy:
     src: node-exporter/node_exporter-ipmitool
     dest: /usr/sbin/node_exporter-ipmitool
@@ -97,7 +97,7 @@
     - prometheus_exporter_ipmitool_enable|bool
     - prometheus_exporter_ipmitool_groupname in group_names or prometheus_exporter_ipmitool_groupname == 'all'
 
-- name: prometheus-exporter - node-exporter(ipmitool) - create cronjob
+- name: node-exporter(ipmitool) - create cronjob
   cron:
     name: node_exporter-ipmitool
     minute: "{{ prometheus_exporter_ipmitool_minute }}"
@@ -111,7 +111,7 @@
 
 # node-exporter
 
-- name: prometheus-exporter - node-exporter - copy binary
+- name: node-exporter - copy binary
   copy:
     src: node-exporter/node_exporter
     dest: /usr/sbin/node_exporter
@@ -121,7 +121,7 @@
   become: true
   notify: Restart node_exporter service
 
-- name: prometheus-exporter - node-exporter - copy service file
+- name: node-exporter - copy service file
   copy:
     src: node-exporter/node_exporter.service
     dest: /etc/systemd/system/node_exporter.service
@@ -131,7 +131,7 @@
   become: true
   notify: Restart node_exporter service
 
-- name: prometheus-exporter - node-exporter - copy defaults file
+- name: node-exporter - copy defaults file
   template:
     src: node-exporter/node_exporter.defaults.j2
     dest: /etc/default/node_exporter
@@ -141,7 +141,7 @@
   become: true
   notify: Restart node_exporter service
 
-- name: prometheus-exporter - node-exporter - enable/start service
+- name: node-exporter - enable/start service
   systemd:
     name: node_exporter
     state: started
