@@ -1,6 +1,7 @@
 ---
 - name: Playbook for role testing
   hosts: all
+  connection: paramiko
 
   vars:
     operator_user: ubuntu
