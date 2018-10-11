@@ -50,7 +50,7 @@ services:
   memcached:
     restart: unless-stopped
     image: "{{ prometheus_exporter_memcached_image }}"
-    entrypoint: "/bin/memcached_exporter -memcached.address {{ prometheus_exporter_memcached_target_host }}:{{ prometheus_exporter_memcached_target_port }}"
+    entrypoint: "/bin/memcached_exporter --memcached.address {{ prometheus_exporter_memcached_target_host }}:{{ prometheus_exporter_memcached_target_port }}"
     volumes:
       - "/etc/hosts:/etc/hosts:ro"
 {% endif -%}
