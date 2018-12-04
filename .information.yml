@@ -1,0 +1,3 @@
+---
+travis_decrypt_key: 59794d2ceae5
+ansible_role_name: prometheus-exporter
