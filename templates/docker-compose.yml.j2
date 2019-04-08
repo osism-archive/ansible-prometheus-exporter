@@ -62,3 +62,11 @@ services:
     volumes:
       - "/etc/hosts:/etc/hosts:ro"
 {% endif -%}
+
+networks:
+ default:
+   driver: bridge
+   ipam:
+     driver: default
+     config:
+       - subnet:  {{ prometheus_exporter_network }}

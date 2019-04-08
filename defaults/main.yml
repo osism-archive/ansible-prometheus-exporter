@@ -12,6 +12,7 @@ prometheus_exporter_textfile_directory: /var/lib/node_exporter
 # docker
 
 docker_registry: index.docker.io
+prometheus_exporter_network: 172.31.102.16/28
 
 ##########################
 # operator user
