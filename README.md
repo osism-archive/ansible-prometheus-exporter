@@ -1,7 +1,7 @@
 # Ansible osism.prometheus-exporter
 
 [![Build Status](https://travis-ci.org/osism/ansible-prometheus-exporter.svg?branch=master)](https://travis-ci.org/osism/ansible-prometheus-exporter)
-[![Ansible Galaxy](https://img.shields.io/badge/Ansible%20Galaxy-osism.prometheus-exporter-blue.svg)](https://galaxy.ansible.com/osism/prometheus-exporter/)
+[![Ansible Galaxy](https://img.shields.io/badge/Ansible%20Galaxy-osism.prometheus--exporter-blue.svg)](https://galaxy.ansible.com/osism/prometheus-exporter/)
 ![Ansible 2.7](https://img.shields.io/badge/Ansible-2.7-green.png?style=flat)
 ![Ansible 2.8](https://img.shields.io/badge/Ansible-2.8-green.png?style=flat)
 ![Ansible 2.9](https://img.shields.io/badge/Ansible-2.9-green.png?style=flat)
